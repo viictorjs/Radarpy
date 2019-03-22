@@ -172,9 +172,8 @@ class GeoRad(Frame):
                         radFile.header['frequency'] = 1e9 # 1 GHz
                     print("points in samples={}, samples={}, channels={}".format(radFile.nrows,
                         radFile.ncols, radFile.nchan))
-                    print(radFile.header)
+                    #print(radFile.header)
                     radFile.read_markers()
-                    #radFile.func_dc(start=500)
                     frame = Frame(root,bg='#F3F3F3')
                     frame.grid(row=1, column=0, sticky = NSEW)
                     self.frames.append(frame)
@@ -182,15 +181,15 @@ class GeoRad(Frame):
                     self.figs.append(fig)
                     ax = plt.subplot(1,1,1)
                     self.axs.append(ax)
-                    img = ax.imshow(radFile.data, aspect='auto', cmap = "Greys", interpolation="nearest")
+                    img = ax.imshow(radFile.data, aspect='auto', cmap = "Greys", interpolation="nearest",
+                                    extent=[0,float(radFile.ncols)/float(radFile.header['spm']),
+                                            float(radFile.header['range']),0])
                     self.arts.append(img)
                     cb = fig.colorbar(img, orientation='vertical', aspect = 50, shrink = .5)
                     self.cbars.append(cb)
                     plt.title('%s'%(os.path.basename(self.files[i])))     
                     plt.xlabel('Distância (m)')
                     plt.ylabel('Tempo (ns)')
-                    #plt.xlim((0,float(radFile.ncols)/float(radFile.header['spm'])))
-                    #plt.ylim((0,radFile.header['range']))
                     tela = FigureCanvasTkAgg(self.figs[i], self.frames[i])
                     self.canvas.append(tela)
                     self.canvas[i].draw()
